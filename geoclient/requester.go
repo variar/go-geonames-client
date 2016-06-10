@@ -12,7 +12,7 @@ type Requester interface {
 	MakeRequest(endpoint string, params url.Values) ([]byte, error)
 }
 
-type Client struct {
+type basicRequester struct {
 	username string
 	lang     string
 }
@@ -21,9 +21,9 @@ const (
 	geonamesURL = "http://api.geonames.org/"
 )
 
-func (client *Client) MakeRequest(endpoint string, params url.Values) ([]byte, error) {
-	params.Set("username", client.username)
-	params.Set("lang", client.lang)
+func (requester *basicRequester) MakeRequest(endpoint string, params url.Values) ([]byte, error) {
+	params.Set("username", requester.username)
+	params.Set("lang", requester.lang)
 
 	query := geonamesURL + endpoint + "?" + params.Encode()
 	glog.Infoln("Query:", query)
@@ -45,6 +45,6 @@ func (client *Client) MakeRequest(endpoint string, params url.Values) ([]byte, e
 	return data, nil
 }
 
-func NewClient(username string, lang string) Requester {
-	return &Client{username: username, lang: lang}
+func NewRequester(username string, lang string) Requester {
+	return &basicRequester{username: username, lang: lang}
 }
