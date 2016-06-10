@@ -8,78 +8,6 @@ import (
 	"github.com/variar/go-geonames-client/geoclient"
 )
 
-/*
-{
-      "toponymName": "London",
-      "fcl": "P",
-      "name": "London",
-      "countryCode": "GB",
-      "lng": "-0.12574",
-      "fcode": "PPLC",
-      "geonameId": 2643743,
-      "lat": "51.50853"
-}*/
-
-type ShortGeoname struct {
-	Lon          string `json:"lng"`
-	Lat          string `json:"lat"`
-	GeonameID    int64  `json:"geonameId"`
-	CountryCode  string `json:"countryCode"`
-	Name         string `json:"name"`
-	ToponymName  string `json:"toponymName"`
-	FeatureCode  string `json:"fcode"`
-	FeatureClass string `json:"fcl"`
-}
-
-type shortSearchResponse struct {
-	Results  int            `json:"totalResultsCount"`
-	Geonames []ShortGeoname `json:"geonames"`
-}
-
-/*{
-  "countryId": "2635167",
-  "adminCode1": "ENG",
-  "countryName": "United Kingdom",
-  "fclName": "city, village,...",
-  "countryCode": "GB",
-  "lng": "-0.12574",
-  "fcodeName": "capital of a political entity",
-  "toponymName": "London",
-  "fcl": "P",
-  "name": "London",
-  "fcode": "PPLC",
-  "geonameId": 2643743,
-  "lat": "51.50853",
-  "adminName1": "England",
-  "population": 7556900
-},*/
-
-type MediumGeoname struct {
-	ShortGeoname
-
-	CountryID   string `json:"countryId"`
-	CountryName string `json:"countryName"`
-	CountryCode string `json:"countryCode"`
-
-	AdminCode1 string `json:"adminCode1"`
-	AdminName1 string `json:"adminName1"`
-
-	FeatureCodeName  string `json:"fcodeName"`
-	FeatureClassName string `json:"fclName"`
-
-	Population int `json:"population"`
-}
-
-type mediumSearchResponse struct {
-	Results  int             `json:"totalResultsCount"`
-	Geonames []MediumGeoname `json:"geonames"`
-}
-
-const (
-	SearchStyleShort  = "short"
-	SearchStyleMedium = "medium"
-)
-
 const (
 	QueryName           = "name"
 	QueryEquals         = "name_equals"
@@ -99,7 +27,7 @@ const (
 	OrderByElevation  = "elevation"
 )
 
-type GeonamesQuery struct {
+type SearchQuery struct {
 	Query      string
 	SearchType string
 
@@ -134,12 +62,12 @@ type GeonamesQuery struct {
 	IncludeBoundingBox bool
 }
 
-func NewQuery(searchType string, name string) GeonamesQuery {
-	return GeonamesQuery{Fuzzy: 1, SearchType: searchType, Query: name, MaxRows: 10}
+func NewSearchQuery(searchType string, name string) *SearchQuery {
+	return &SearchQuery{Fuzzy: 1, SearchType: searchType, Query: name, MaxRows: 10}
 }
 
-func GetShortGeonames(requester geoclient.Requester, query GeonamesQuery) ([]ShortGeoname, error) {
-	data, err := getGeonames(requester, query, SearchStyleShort)
+func GetShortGeonames(requester geoclient.Requester, query *SearchQuery) ([]ShortGeoname, error) {
+	data, err := getGeonames(requester, query, searchStyleShort)
 	if err != nil {
 		return nil, err
 	}
@@ -153,8 +81,8 @@ func GetShortGeonames(requester geoclient.Requester, query GeonamesQuery) ([]Sho
 	return response.Geonames, nil
 }
 
-func GetMediumGeonames(requester geoclient.Requester, query GeonamesQuery) ([]MediumGeoname, error) {
-	data, err := getGeonames(requester, query, SearchStyleMedium)
+func GetMediumGeonames(requester geoclient.Requester, query *SearchQuery) ([]MediumGeoname, error) {
+	data, err := getGeonames(requester, query, searchStyleMedium)
 	if err != nil {
 		return nil, err
 	}
@@ -168,7 +96,7 @@ func GetMediumGeonames(requester geoclient.Requester, query GeonamesQuery) ([]Me
 	return response.Geonames, nil
 }
 
-func getGeonames(requester geoclient.Requester, query GeonamesQuery, style string) ([]byte, error) {
+func getGeonames(requester geoclient.Requester, query *SearchQuery, style string) ([]byte, error) {
 	request := url.Values{}
 	request.Set("style", style)
 	request.Set(query.SearchType, query.Query)
