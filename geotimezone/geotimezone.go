@@ -1,4 +1,15 @@
-/*Package geotimezone provides timezone data from coordinates
+//Package geotimezone provides timezone data from coordinates
+//http://www.geonames.org/export/web-services.html#timezone
+package geotimezone
+
+import (
+	"encoding/json"
+	"net/url"
+
+	"github.com/variar/go-geonames-client/geoclient"
+)
+
+/*Timezone data as reported by geonames timezone JSON service
 http://www.geonames.org/export/web-services.html#timezone
 {
   "sunrise": "2016-06-09 05:24",
@@ -12,19 +23,7 @@ http://www.geonames.org/export/web-services.html#timezone
   "countryName": "Austria",
   "time": "2016-06-09 00:36",
   "lat": 47.01
-}
-*/
-package geotimezone
-
-import (
-	"encoding/json"
-	"net/url"
-
-	"github.com/variar/go-geonames-client/geoclient"
-)
-
-// Timezone data as reported by geonames timezone JSON service
-// http://www.geonames.org/export/web-services.html#timezone
+}*/
 type Timezone struct {
 	TimezoneId  string `json:"timezoneId"`
 	CountryCode string `json:"countryCode"`

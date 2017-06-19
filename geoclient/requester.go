@@ -1,4 +1,4 @@
-// Package geoclient provide an interface to make requests to geonames API
+// Package geoclient provides an interface to make requests to geonames API
 package geoclient
 
 import (
