@@ -1,3 +1,4 @@
+// Package geoclient provide an interface to make requests to geonames API
 package geoclient
 
 import (
@@ -8,6 +9,7 @@ import (
 	"github.com/golang/glog"
 )
 
+// Requester interface is used to make a request to provided endpoint
 type Requester interface {
 	MakeRequest(endpoint string, params url.Values) ([]byte, error)
 }
@@ -45,6 +47,7 @@ func (requester *basicRequester) MakeRequest(endpoint string, params url.Values)
 	return data, nil
 }
 
+// NewRequester creates a requester with preset username and language parameters
 func NewRequester(username string, lang string) Requester {
 	return &basicRequester{username: username, lang: lang}
 }

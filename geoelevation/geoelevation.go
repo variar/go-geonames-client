@@ -1,3 +1,4 @@
+// Package geoelevation provides elevation data from geonames service
 package geoelevation
 
 import (
@@ -7,10 +8,11 @@ import (
 	"github.com/variar/go-geonames-client/geoclient"
 )
 
+//Elevation structure
 type Elevation struct {
-	Height int
-	Lon    float32
-	Lat    float32
+	Height int     // height
+	Lon    float32 // longitude
+	Lat    float32 // latitude
 }
 
 func getElevationData(requester geoclient.Requester, endpoint string, lon string, lat string) ([]byte, error) {
@@ -21,6 +23,8 @@ func getElevationData(requester geoclient.Requester, endpoint string, lon string
 	return requester.MakeRequest(endpoint, request)
 }
 
+//GetAstergdemElevation provides elevation for given longitude and latitude using astergdem data
+//http://www.geonames.org/export/web-services.html#astergdem
 func GetAstergdemElevation(requester geoclient.Requester, lon string, lat string) (Elevation, error) {
 	data, err := getElevationData(requester, "astergdemJSON", lon, lat)
 	if err != nil {
@@ -41,6 +45,8 @@ func GetAstergdemElevation(requester geoclient.Requester, lon string, lat string
 	return Elevation{Height: result.Astergdem, Lat: result.Lat, Lon: result.Lng}, nil
 }
 
+//GetGtopo30Elevation provides elevation for given longitude and latitude using gtopo30 data
+//http://www.geonames.org/export/web-services.html#gtopo30
 func GetGtopo30Elevation(requester geoclient.Requester, lon string, lat string) (Elevation, error) {
 	data, err := getElevationData(requester, "gtopo30JSON", lon, lat)
 	if err != nil {
@@ -61,6 +67,8 @@ func GetGtopo30Elevation(requester geoclient.Requester, lon string, lat string) 
 	return Elevation{Height: result.Gtopo30, Lat: result.Lat, Lon: result.Lng}, nil
 }
 
+//GetSrtm3Elevation provides elevation for given longitude and latitude using strm3 data
+//http://www.geonames.org/export/web-services.html#strm3
 func GetSrtm3Elevation(requester geoclient.Requester, lon string, lat string) (Elevation, error) {
 	data, err := getElevationData(requester, "srtm3JSON", lon, lat)
 	if err != nil {

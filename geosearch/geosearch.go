@@ -1,3 +1,7 @@
+//Package geosearch provides functions to query geonames cities data
+//using search and nearby services
+//http://www.geonames.org/export/geonames-search.html
+//http://www.geonames.org/export/web-services.html#findNearby
 package geosearch
 
 import (
@@ -8,6 +12,7 @@ import (
 	"github.com/variar/go-geonames-client/geoclient"
 )
 
+// Query types
 const (
 	QueryName           = "name"
 	QueryEquals         = "name_equals"
@@ -15,18 +20,22 @@ const (
 	QueryAll            = "q"
 )
 
+// Cities database types
 const (
 	Cities1000  = "cities1000"
 	Cities5000  = "cities5000"
 	Cities15000 = "cities15000"
 )
 
+// Order by variants
 const (
 	OrderByRelevance  = "relevance"
 	OrderByPopulation = "population"
 	OrderByElevation  = "elevation"
 )
 
+//SearchQuery holds all data for making a query to search geonames API
+//http://www.geonames.org/export/geonames-search.html
 type SearchQuery struct {
 	Query      string
 	SearchType string
@@ -62,10 +71,12 @@ type SearchQuery struct {
 	IncludeBoundingBox bool
 }
 
+//NewSearchQuery creates query to search for name using provided query type
 func NewSearchQuery(searchType string, name string) *SearchQuery {
 	return &SearchQuery{Fuzzy: 1, SearchType: searchType, Query: name, MaxRows: 10}
 }
 
+//GetShortGeonames runs given query and returns ShortGeoname data
 func GetShortGeonames(requester geoclient.Requester, query *SearchQuery) ([]ShortGeoname, error) {
 	data, err := getGeonames(requester, query, searchStyleShort)
 	if err != nil {
@@ -81,6 +92,7 @@ func GetShortGeonames(requester geoclient.Requester, query *SearchQuery) ([]Shor
 	return response.Geonames, nil
 }
 
+//GetMediumGeonames runs given query and returns MediumGeoname data
 func GetMediumGeonames(requester geoclient.Requester, query *SearchQuery) ([]MediumGeoname, error) {
 	data, err := getGeonames(requester, query, searchStyleMedium)
 	if err != nil {

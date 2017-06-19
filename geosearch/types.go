@@ -5,7 +5,7 @@ const (
 	searchStyleMedium = "medium"
 )
 
-/*
+/*ShortGeoname data
 {
       "toponymName": "London",
       "fcl": "P",
@@ -16,7 +16,6 @@ const (
       "geonameId": 2643743,
       "lat": "51.50853"
 }*/
-
 type ShortGeoname struct {
 	Lon          string `json:"lng"`
 	Lat          string `json:"lat"`
@@ -33,7 +32,8 @@ type shortSearchResponse struct {
 	Geonames []ShortGeoname `json:"geonames"`
 }
 
-/*{
+/*MediumGeoname data
+{
   "countryId": "2635167",
   "adminCode1": "ENG",
   "countryName": "United Kingdom",
@@ -49,8 +49,7 @@ type shortSearchResponse struct {
   "lat": "51.50853",
   "adminName1": "England",
   "population": 7556900
-},*/
-
+}*/
 type MediumGeoname struct {
 	ShortGeoname
 

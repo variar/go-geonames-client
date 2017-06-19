@@ -8,12 +8,8 @@ import (
 	"github.com/variar/go-geonames-client/geoclient"
 )
 
-/*
-Url : api.geonames.org/findNearby?
-Parameters : lat,lng, featureClass,featureCode, radius: radius in km (optional), maxRows : max number of rows (default 10)
-style : SHORT,MEDIUM,LONG,FULL (default = MEDIUM), verbosity of returned xml document
-localCountry: in border areas this parameter will restrict the search on the local country, value=true
-Result : returns the closest toponym for the lat/lng query as xml document
+/*NearbyQuery data to findNearby geonames API
+http://www.geonames.org/export/web-services.html#findNearby
 */
 type NearbyQuery struct {
 	Lat string
@@ -28,10 +24,12 @@ type NearbyQuery struct {
 	LocalCountry bool
 }
 
+//NewNearbyQuery create new query with prefilled latitude and longitude parameters
 func NewNearbyQuery(lon string, lat string) *NearbyQuery {
 	return &NearbyQuery{Lat: lat, Lng: lon, MaxRows: 10}
 }
 
+//GetShortNearbyGeonames returns ShortGeoname for NearbyQuery
 func GetShortNearbyGeonames(requester geoclient.Requester, query *NearbyQuery) ([]ShortGeoname, error) {
 	data, err := getNearbyGeonames(requester, query, searchStyleShort)
 	if err != nil {
@@ -47,6 +45,7 @@ func GetShortNearbyGeonames(requester geoclient.Requester, query *NearbyQuery) (
 	return response.Geonames, nil
 }
 
+//GetMediumNearbyGeonames returns ShortGeoname for NearbyQuery
 func GetMediumNearbyGeonames(requester geoclient.Requester, query *NearbyQuery) ([]MediumGeoname, error) {
 	data, err := getNearbyGeonames(requester, query, searchStyleMedium)
 	if err != nil {

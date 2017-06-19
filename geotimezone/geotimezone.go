@@ -1,14 +1,5 @@
-package geotimezone
-
-import (
-	"encoding/json"
-	"net/url"
-
-	"github.com/variar/go-geonames-client/geoclient"
-)
-
-/*
-http://api.geonames.org/timezoneJSON
+/*Package geotimezone provides timezone data from coordinates
+http://www.geonames.org/export/web-services.html#timezone
 {
   "sunrise": "2016-06-09 05:24",
   "lng": 10.2,
@@ -23,7 +14,17 @@ http://api.geonames.org/timezoneJSON
   "lat": 47.01
 }
 */
+package geotimezone
 
+import (
+	"encoding/json"
+	"net/url"
+
+	"github.com/variar/go-geonames-client/geoclient"
+)
+
+// Timezone data as reported by geonames timezone JSON service
+// http://www.geonames.org/export/web-services.html#timezone
 type Timezone struct {
 	TimezoneId  string `json:"timezoneId"`
 	CountryCode string `json:"countryCode"`
@@ -37,6 +38,7 @@ type Timezone struct {
 	Lon float32 `json:"lng"`
 }
 
+// GetTimezone returns timezone data for given longitude and latitude
 func GetTimezone(requester geoclient.Requester, lon string, lat string) (Timezone, error) {
 	request := url.Values{}
 	request.Set("lat", lat)
